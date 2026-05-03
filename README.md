@@ -10,7 +10,7 @@
 
 ### Инструкция
 ```bash
-git clone <...> && cd TimeTracker
+git clone https://github.com/TuRb0Zzz/PKS_kr_3 && cd TimeTracker
 cmake -S . -B build
 cmake --build build
 cd build && ./timetracker
