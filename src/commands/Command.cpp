@@ -1,5 +1,8 @@
 #include "commands/Command.h"
 #include <iostream>
+#include <algorithm>
+#include <iterator>
+
 StartTimerCommand::StartTimerCommand(Task* t, User* u, std::vector<TimeSession>& s, int& nid)
     : task(t), user(u), sessions(s), nextId(nid), createdSessionId(-1) {}
 void StartTimerCommand::execute() {

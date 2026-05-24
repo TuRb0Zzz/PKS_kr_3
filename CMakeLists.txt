@@ -5,11 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if(MSVC)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+endif()
+
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 include_directories(${INCLUDE_DIR})
 
-set(SOURCES
-    src/main.cpp
+set(CORE_SOURCES
     src/commands/Command.cpp
     src/controllers/TimeTrackerController.cpp
     src/models/Project.cpp
@@ -21,4 +24,22 @@ set(SOURCES
     src/factories/ReportFactory.cpp
 )
 
-add_executable(timetracker ${SOURCES})
+add_library(core OBJECT ${CORE_SOURCES})
+target_include_directories(core PRIVATE ${INCLUDE_DIR})
+
+
+add_executable(timetracker src/main.cpp)
+target_link_libraries(timetracker core)
+
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(timetracker PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(core PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+
+option(BUILD_TESTS "Build unit tests" ON)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
